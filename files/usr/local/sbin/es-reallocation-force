@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ES_SERVER="127.0.0.1"
+
+curl -XPOST "$ES_SERVER:9200/_cluster/reroute?retry_failed=true&master_timeout=300m"

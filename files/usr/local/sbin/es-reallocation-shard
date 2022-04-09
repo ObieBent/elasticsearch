@@ -1,0 +1,47 @@
+#!/bin/bash
+
+ES_SERVER="127.0.0.1"
+
+syntax() {
+    echo "Usage: ${0##*/} -i indice -n node -s shard"
+    echo
+    echo "Options:"
+    echo "  -i indice      Indice name"
+    echo "  -s shard       Shard to reallocate"
+    echo "  -n node        On which node is the indice"
+
+    exit 1
+}
+
+
+while getopts "f" opt; do
+    case $opt in
+        i)
+            INDEX=$OPTARG
+            ;;
+        s)
+            SHARD=$OPTARG
+            ;;
+        n)
+            NODE=${OPTARG}
+            ;;
+        *)
+        syntax
+        exit 1
+        ;;
+    esac
+done
+
+
+curl -XPOST "$ES_SERVER:9200/_cluster/reroute?pretty" -d '{
+    "commands" : [ {
+        "allocate_empty_primary" :
+            {
+                "index" : "'${INDEX}'",
+                "shard" : '${SHARD}',
+                "node" : "'${NODE}'",
+                "accept_data_loss" : true
+            }
+        }
+    ]
+}'
