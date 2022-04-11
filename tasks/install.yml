@@ -151,13 +151,13 @@
     host: 127.0.0.1
     port: "{{ es_port }}"
 
-- name: install | Enable shard and replicas for the cluster
-  uri:
-    url:         "http://127.0.0.1:{{ es_port }}/_template/default"
-    method:      POST
-    body:        "{{ lookup('template','settings-{{ es_major_version }}.x.json.j2') }}"
-    body_format: json
-    timeout:     120
-  tags:
-    - config
+#- name: install | Enable shard and replicas for the cluster
+#  uri:
+#    url:         "http://127.0.0.1:{{ es_port }}/_template/default"
+#    method:      POST
+#    body:        "{{ lookup('template','settings-{{ es_major_version }}.x.json.j2') }}"
+#    body_format: json
+#    timeout:     120
+#  tags:
+#    - config
 
