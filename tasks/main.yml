@@ -16,15 +16,15 @@
       paths: '../vars'
 
 # Configure backup dir
-- include: configure_backup_dir.yml
+- include_tasks: configure_backup_dir.yml
   tags: config
 
 # Configure firewall
-- include: firewall.yml
+- include_tasks: firewall.yml
   when: firewall_setup
 
 # install elasticsearch
-- include: install.yml
+- include_tasks: install.yml
   tags:
     - setup
     - install
@@ -33,24 +33,24 @@
   meta: flush_handlers
 
 # Add admin script
-- include: script.yml
+- include_tasks: script.yml
   when: es_install_admin_scripts
   tags:
     - script
 
 # Add prompt script
-- include: prompt.yml
+- include_tasks: prompt.yml
   when: es_install_prompt_scripts
   tags:
     - script
     - prompt_scripts
 
-- include: plugins.yml
+- include_tasks: plugins.yml
   when: es_plugins is defined
   tags: config
 
 - name: main | Deploy ILM configuration
-  include: "ilm.yml indice={{ d.key }} ilm={{ d.value }}"
+  include_tasks: "ilm.yml indice={{ d.key }} ilm={{ d.value }}"
   with_dict: "{{ es_ilm | default({}) }}"
   loop_control:
     loop_var: d
@@ -59,7 +59,7 @@
     - config
     - config_ilm
 
-- include: indice.yml
+- include_tasks: indice.yml
   when: es_indice_purge|length > 0
   tags:
     - config_cron
